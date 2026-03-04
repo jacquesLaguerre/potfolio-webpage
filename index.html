@@ -658,10 +658,10 @@
   <!-- ─── NAVBAR ─────────────────────────────────────────── -->
   <nav id="navbar">
     <div class="nav-indicator" id="navIndicator"></div>
-    <a href="/#home" class="active" data-short="H"><span>Home</span></a>
-    <a href="/#about" data-short="A"><span>About</span></a>
-    <a href="/#work" data-short="W"><span>Projects</span></a>
-    <a href="/#contact" data-short="C"><span>Contact</span></a>
+    <a href="#home" class="active" data-short="H"><span>Home</span></a>
+    <a href="#about" data-short="A"><span>About</span></a>
+    <a href="#work" data-short="W"><span>Projects</span></a>
+    <a href="#contact" data-short="C"><span>Contact</span></a>
     <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
       <!-- sun icon -->
       <svg id="iconSun" viewBox="0 0 24 24" stroke-width="1.8" style="display:none">
@@ -693,7 +693,7 @@
     <h1 class="hero-title" id="heroTitle">Work Smarter<br>Save Time <br> Grow</h1>
     <p class="hero-sub" id="heroSub">If you need to optimize your business or need your digital footprint for exposure you've come to the right place.   </p>
 
-    <a href="/#work" class="hero-btn">View My Work</a>
+    <a href="#work" class="hero-btn">View My Work</a>
 
     <div class="globe"></div>
   </section>
@@ -720,7 +720,7 @@
         </a>
       </div>
 
-      <a href="/#contact" class="contact-btn-small">
+      <a href="#contact" class="contact-btn-small">
         Contact Me
         <svg viewBox="0 0 24 24" stroke-width="2"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>
       </a>
@@ -926,11 +926,11 @@
     applyTheme(saved || 'dark');
 
     const sectionToHash = {
-      home: '/#home',
-      about: '/#about',
-      work: '/#work',
-      mission: '/#contact',
-      contact: '/#contact',
+      home: '#home',
+      about: '#about',
+      work: '#work',
+      mission: '#contact',
+      contact: '#contact',
     };
 
     /* ── Active Nav Highlight ── */
@@ -1060,18 +1060,36 @@
     })();
 
     /* ── Contact Form ── */
-    function submitForm() {
+    async function submitForm() {
       const name = document.getElementById('formName').value.trim();
       const email = document.getElementById('formEmail').value.trim();
       const msg = document.getElementById('formMessage').value.trim();
       if (!name || !email || !msg) { alert('Please fill in all fields.'); return; }
-      const subject = encodeURIComponent('Portfolio inquiry from ' + name);
-      const body = encodeURIComponent('Name: ' + name + '\nEmail: ' + email + '\n\nMessage:\n' + msg);
-      const a = document.createElement('a');
-      a.href = 'mailto:jacquesblaguerre@gmail.com?subject=' + subject + '&body=' + body;
-      a.click();
-      document.getElementById('contactForm').style.display = 'none';
-      document.getElementById('formSuccess').classList.add('show');
+
+      const btn = document.querySelector('.form-submit');
+      btn.disabled = true;
+      btn.textContent = 'Sending…';
+
+      try {
+        const res = await fetch('https://formspree.io/f/mdalqgkv', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+          body: JSON.stringify({ name, email, message: msg }),
+        });
+
+        if (res.ok) {
+          document.getElementById('contactForm').style.display = 'none';
+          document.getElementById('formSuccess').classList.add('show');
+        } else {
+          alert('Something went wrong. Please try again or email jacquesblaguerre@gmail.com directly.');
+          btn.disabled = false;
+          btn.textContent = 'Send Message';
+        }
+      } catch {
+        alert('Network error. Please try again or email jacquesblaguerre@gmail.com directly.');
+        btn.disabled = false;
+        btn.textContent = 'Send Message';
+      }
     }
   </script>
 </body>
