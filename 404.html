@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <script>
+    // GitHub Pages SPA redirect trick.
+    // pathSegmentsToKeep:
+    //   0 — user page   (username.github.io)
+    //   1 — project page (username.github.io/repo-name)
+    var pathSegmentsToKeep = 0;
+
+    sessionStorage.setItem('spa-path', location.pathname);
+
+    var base = location.pathname
+      .split('/')
+      .slice(0, 1 + pathSegmentsToKeep)
+      .join('/') || '/';
+
+    location.replace(base);
+  </script>
+</head>
+</html>

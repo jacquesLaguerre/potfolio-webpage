@@ -1,0 +1,1078 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Jacques Laguerre</title>
+  <link rel="icon" type="image/png" href="images/logo.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet" />
+  <style>
+    /* ─── CSS VARIABLES ─────────────────────────────────────── */
+    :root {
+      --bg:        #0a0a0a;
+      --bg2:       #111111;
+      --bg3:       #1a1a1a;
+      --border:    rgba(255,255,255,0.08);
+      --text:      #f0f0f0;
+      --text2:     #888;
+      --accent:    #ffffff;
+      --pill-bg:   rgba(255,255,255,0.07);
+      --card-bg:   rgba(255,255,255,0.04);
+      --nav-bg:    rgba(10,10,10,0.85);
+      --btn-bg:    #ffffff;
+      --btn-text:  #0a0a0a;
+      --shadow:    0 0 60px rgba(0,0,0,0.6);
+      --radius:    20px;
+      --transition: 0.35s cubic-bezier(0.4,0,0.2,1);
+    }
+
+    [data-theme="light"] {
+      --bg:        #f4f3f0;
+      --bg2:       #ececea;
+      --bg3:       #e2e1de;
+      --border:    rgba(0,0,0,0.08);
+      --text:      #111111;
+      --text2:     #666;
+      --accent:    #111111;
+      --pill-bg:   rgba(0,0,0,0.06);
+      --card-bg:   rgba(0,0,0,0.03);
+      --nav-bg:    rgba(244,243,240,0.85);
+      --btn-bg:    #111111;
+      --btn-text:  #f4f3f0;
+      --shadow:    0 0 60px rgba(0,0,0,0.12);
+    }
+
+    /* ─── RESET ─────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      transition: background var(--transition), color var(--transition);
+      overflow-x: hidden;
+    }
+    a { color: inherit; text-decoration: none; }
+    img { display: block; max-width: 100%; }
+
+    /* ─── NAV ────────────────────────────────────────────────── */
+    nav {
+      position: fixed;
+      top: 18px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 100;
+      background: var(--nav-bg);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      padding: 6px 8px;
+      display: flex;
+      align-items: center;
+      gap: 2px;
+      transition: background var(--transition);
+    }
+
+    .nav-indicator {
+      position: absolute;
+      top: 6px;
+      height: calc(100% - 12px);
+      border-radius: 999px;
+      background: var(--text);
+      opacity: 0.12;
+      transition: left 0.3s cubic-bezier(0.4,0,0.2,1), width 0.3s cubic-bezier(0.4,0,0.2,1);
+      pointer-events: none;
+    }
+
+    nav a {
+      position: relative;
+      padding: 8px 20px;
+      border-radius: 999px;
+      font-family: 'Syne', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text2);
+      transition: color 0.25s;
+      white-space: nowrap;
+    }
+    nav a.active { color: var(--text); }
+
+    .theme-toggle {
+      margin-left: 8px;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      border: 1px solid var(--border);
+      background: var(--pill-bg);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background var(--transition);
+      flex-shrink: 0;
+    }
+    .theme-toggle svg { width: 16px; height: 16px; fill: var(--text); }
+    .theme-toggle:hover { background: var(--bg3); }
+
+    /* ─── HERO ───────────────────────────────────────────────── */
+    #home {
+      min-height: 100vh;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 120px 24px 80px;
+      overflow: hidden;
+    }
+
+    /* Grid lines */
+    .grid-bg {
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(var(--border) 1px, transparent 1px),
+        linear-gradient(90deg, var(--border) 1px, transparent 1px);
+      background-size: 96px 96px;
+      opacity: 0.6;
+      pointer-events: none;
+    }
+
+    /* Globe glow */
+    .globe {
+      position: absolute;
+      bottom: -180px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: min(900px, 120vw);
+      height: min(900px, 120vw);
+      border-radius: 50%;
+      background: radial-gradient(ellipse at 50% 100%, rgba(255,255,255,0.18) 0%, rgba(255,255,255,0.04) 40%, transparent 70%);
+      border: 1px solid rgba(255,255,255,0.15);
+      pointer-events: none;
+      transition: background var(--transition);
+    }
+    [data-theme="light"] .globe {
+      background: radial-gradient(ellipse at 50% 100%, rgba(0,0,0,0.08) 0%, rgba(0,0,0,0.02) 40%, transparent 70%);
+      border-color: rgba(0,0,0,0.12);
+    }
+
+    .hero-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      padding: 8px 18px;
+      font-size: 0.78rem;
+      font-family: 'Syne', sans-serif;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--text2);
+      margin-bottom: 32px;
+      background: var(--pill-bg);
+      backdrop-filter: blur(10px);
+      cursor: pointer;
+      transition: border-color 0.25s;
+      position: relative;
+      z-index: 1;
+    }
+    .hero-pill:hover { border-color: var(--text2); }
+    .hero-pill svg { width: 12px; height: 12px; stroke: var(--text2); fill: none; }
+
+    .hero-title {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(2.8rem, 8vw, 6.5rem);
+      font-weight: 800;
+      line-height: 1.0;
+      letter-spacing: -0.03em;
+      color: var(--text);
+      position: relative;
+      z-index: 1;
+      max-width: 900px;
+    }
+
+    .hero-sub {
+      margin-top: 24px;
+      font-size: clamp(0.9rem, 2vw, 1.05rem);
+      color: var(--text2);
+      max-width: 560px;
+      line-height: 1.65;
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-btn {
+      margin-top: 40px;
+      position: relative;
+      z-index: 1;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--btn-bg);
+      color: var(--btn-text);
+      border: none;
+      border-radius: 999px;
+      padding: 16px 36px;
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .hero-btn:hover { transform: translateY(-2px); box-shadow: 0 12px 30px rgba(0,0,0,0.25); }
+
+    /* carousel arrows */
+ 
+
+    /* ─── ABOUT ──────────────────────────────────────────────── */
+    #about {
+      padding: 100px 24px;
+      display: flex;
+      justify-content: center;
+    }
+
+    .about-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 44px 36px;
+      max-width: 420px;
+      width: 100%;
+      text-align: center;
+      backdrop-filter: blur(10px);
+      transition: background var(--transition), border-color var(--transition);
+    }
+    .about-card:hover { border-color: rgba(255,255,255,0.18); }
+    [data-theme="light"] .about-card:hover { border-color: rgba(0,0,0,0.2); }
+
+    .about-avatar {
+      width: 88px;
+      height: 88px;
+      border-radius: 50%;
+      background: var(--bg3);
+      border: 2px solid var(--border);
+      margin: 0 auto 20px;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.2rem;
+    }
+    .about-avatar img { width: 100%; height: 100%; object-fit: cover; }
+
+    .about-name {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.4rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+    }
+    .about-role {
+      font-size: 0.85rem;
+      color: var(--text2);
+      margin-top: 4px;
+    }
+    .about-bio {
+      margin-top: 16px;
+      font-size: 0.9rem;
+      color: var(--text2);
+      line-height: 1.65;
+      padding-bottom: 20px;
+      border-bottom: 1px solid var(--border);
+    }
+    .about-socials {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      margin-top: 24px;
+    }
+    .social-btn {
+      width: 44px; height: 44px;
+      border-radius: 50%;
+      background: var(--pill-bg);
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.2s;
+    }
+    .social-btn:hover { background: var(--bg3); transform: translateY(-2px); }
+    .social-btn svg { width: 18px; height: 18px; stroke: var(--text); fill: none; }
+
+    .contact-btn-small {
+      margin-top: 24px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      padding: 13px 28px;
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: 0.88rem;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.2s;
+      color: var(--text);
+    }
+    .contact-btn-small:hover { background: var(--bg3); transform: translateY(-2px); }
+    .contact-btn-small svg { width: 14px; height: 14px; stroke: var(--text); fill: none; }
+
+    /* ─── SECTION SHARED ─────────────────────────────────────── */
+    section { padding: 100px 24px; }
+
+    .section-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.72rem;
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text2);
+      margin-bottom: 16px;
+    }
+    .section-label::before {
+      content: '';
+      display: block;
+      width: 20px;
+      height: 1px;
+      background: var(--text2);
+    }
+
+    .section-title {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      line-height: 1.05;
+      max-width: 640px;
+    }
+
+    .section-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    /* ─── WORK ───────────────────────────────────────────────── */
+    #work .section-inner { }
+
+    .work-grid {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 16px;
+      margin-top: 56px;
+    }
+
+    .work-card {
+      border-radius: var(--radius);
+      overflow: hidden;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      position: relative;
+      cursor: pointer;
+      group: true;
+    }
+    .work-card:nth-child(1) { grid-column: span 7; }
+    .work-card:nth-child(2) { grid-column: span 5; }
+    .work-card:nth-child(3) { grid-column: span 5; }
+    .work-card:nth-child(4) { grid-column: span 7; }
+
+    .work-card-img {
+      width: 100%;
+      aspect-ratio: 16/10;
+      background: var(--bg3);
+      overflow: hidden;
+      position: relative;
+    }
+    .work-card-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s cubic-bezier(0.4,0,0.2,1);
+    }
+    .work-card:hover .work-card-img img { transform: scale(1.05); }
+
+    /* placeholder when no image */
+    .work-card-img .placeholder {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 3rem;
+      opacity: 0.15;
+    }
+
+    .work-card-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(0,0,0,0.75) 0%, transparent 50%);
+      opacity: 0;
+      transition: opacity 0.35s;
+      display: flex;
+      align-items: flex-end;
+      padding: 24px;
+    }
+    [data-theme="light"] .work-card-overlay {
+      background: linear-gradient(to top, rgba(0,0,0,0.6) 0%, transparent 50%);
+    }
+    .work-card:hover .work-card-overlay { opacity: 1; }
+
+    .work-card-overlay-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: #fff;
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: 0.85rem;
+    }
+    .work-card-overlay-link svg { width: 14px; height: 14px; stroke: #fff; fill: none; }
+
+    .work-card-meta {
+      padding: 18px 20px;
+    }
+    .work-card-title {
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: 1rem;
+    }
+    .work-card-desc {
+      font-size: 0.8rem;
+      color: var(--text2);
+      margin-top: 4px;
+    }
+
+    /* ─── MISSION ────────────────────────────────────────────── */
+    #mission {
+      background: var(--bg2);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      transition: background var(--transition);
+    }
+
+    .mission-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: center;
+    }
+
+    .mission-text { }
+    .mission-body {
+      margin-top: 32px;
+      font-size: 1.05rem;
+      line-height: 1.75;
+      color: var(--text2);
+    }
+    .mission-body strong { color: var(--text); font-weight: 500; }
+
+    .mission-stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+    .stat-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 28px 24px;
+      transition: background var(--transition);
+    }
+    .stat-number {
+      font-family: 'Syne', sans-serif;
+      font-size: 2.6rem;
+      font-weight: 800;
+      letter-spacing: -0.04em;
+      line-height: 1;
+    }
+    .stat-label {
+      font-size: 0.82rem;
+      color: var(--text2);
+      margin-top: 6px;
+    }
+
+    /* ─── CONTACT ────────────────────────────────────────────── */
+    #contact .section-inner {
+      display: grid;
+      grid-template-columns: 1fr 1.2fr;
+      gap: 80px;
+      align-items: start;
+    }
+
+    .contact-left { }
+    .contact-tagline {
+      margin-top: 24px;
+      font-size: 1rem;
+      color: var(--text2);
+      line-height: 1.7;
+    }
+
+    .contact-form {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+
+    .form-group { display: flex; flex-direction: column; gap: 6px; }
+    .form-group label {
+      font-size: 0.78rem;
+      font-family: 'Syne', sans-serif;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--text2);
+    }
+    .form-group input,
+    .form-group textarea {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 14px 18px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.95rem;
+      color: var(--text);
+      outline: none;
+      transition: border-color 0.25s, background var(--transition);
+      resize: none;
+    }
+    .form-group input:focus,
+    .form-group textarea:focus { border-color: var(--text2); }
+    .form-group input::placeholder,
+    .form-group textarea::placeholder { color: var(--text2); opacity: 0.5; }
+    .form-group textarea { min-height: 140px; }
+
+    .form-submit {
+      align-self: flex-start;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--btn-bg);
+      color: var(--btn-text);
+      border: none;
+      border-radius: 999px;
+      padding: 16px 36px;
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+      margin-top: 4px;
+    }
+    .form-submit:hover { transform: translateY(-2px); box-shadow: 0 12px 30px rgba(0,0,0,0.25); }
+    .form-submit svg { width: 16px; height: 16px; stroke: var(--btn-text); fill: none; }
+
+    /* ─── FOOTER ─────────────────────────────────────────────── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 32px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    .footer-name {
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: 0.9rem;
+    }
+    .footer-copy {
+      font-size: 0.8rem;
+      color: var(--text2);
+    }
+
+    /* ─── ANIMATIONS ─────────────────────────────────────────── */
+    .fade-up {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.7s cubic-bezier(0.4,0,0.2,1), transform 0.7s cubic-bezier(0.4,0,0.2,1);
+    }
+    .fade-up.visible { opacity: 1; transform: translateY(0); }
+    .fade-up:nth-child(2) { transition-delay: 0.1s; }
+    .fade-up:nth-child(3) { transition-delay: 0.2s; }
+    .fade-up:nth-child(4) { transition-delay: 0.3s; }
+
+    /* ─── MOBILE ─────────────────────────────────────────────── */
+    @media (max-width: 900px) {
+      nav { padding: 5px 6px; gap: 0; }
+      nav a { padding: 8px 14px; font-size: 0.8rem; }
+
+      .work-card:nth-child(1),
+      .work-card:nth-child(2),
+      .work-card:nth-child(3),
+      .work-card:nth-child(4) { grid-column: span 12; }
+
+      .mission-inner { grid-template-columns: 1fr; gap: 48px; }
+
+      #contact .section-inner { grid-template-columns: 1fr; gap: 48px; }
+      .form-row { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 600px) {
+      nav a span { display: none; }
+      nav a::after { content: attr(data-short); font-size: 0.8rem; }
+      .hero-arrow { display: none; }
+      .mission-stats { grid-template-columns: 1fr 1fr; }
+    }
+
+    /* ─── STARS CANVAS ──────────────────────────────────────── */
+    #starsCanvas {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ─── SUCCESS MESSAGE ────────────────────────────────────── */
+    .form-success {
+      display: none;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 28px;
+      text-align: center;
+      font-family: 'Syne', sans-serif;
+    }
+    .form-success.show { display: block; }
+    .form-success-icon { font-size: 2rem; margin-bottom: 12px; }
+    .form-success p { color: var(--text2); font-size: 0.9rem; margin-top: 6px; font-family: 'DM Sans', sans-serif; }
+  </style>
+</head>
+<body>
+
+  <!-- ─── NAVBAR ─────────────────────────────────────────── -->
+  <nav id="navbar">
+    <div class="nav-indicator" id="navIndicator"></div>
+    <a href="/#home" class="active" data-short="H"><span>Home</span></a>
+    <a href="/#about" data-short="A"><span>About</span></a>
+    <a href="/#work" data-short="W"><span>Projects</span></a>
+    <a href="/#contact" data-short="C"><span>Contact</span></a>
+    <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+      <!-- sun icon -->
+      <svg id="iconSun" viewBox="0 0 24 24" stroke-width="1.8" style="display:none">
+        <circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/>
+        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+        <line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/>
+        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+      </svg>
+      <!-- moon icon -->
+      <svg id="iconMoon" viewBox="0 0 24 24" stroke-width="1.8">
+        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+      </svg>
+    </button>
+  </nav>
+
+  <!-- ─── HERO ───────────────────────────────────────────── -->
+  <section id="home">
+    <div class="grid-bg"></div>
+    <canvas id="starsCanvas"></canvas>
+
+    <div class="hero-arrow left" onclick="prevSlide()">
+      <svg viewBox="0 0 24 24" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+    </div>
+    <div class="hero-arrow right" onclick="nextSlide()">
+      <svg viewBox="0 0 24 24" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+    </div>
+
+  
+    <h1 class="hero-title" id="heroTitle">Work Smarter<br>Save Time <br> Grow</h1>
+    <p class="hero-sub" id="heroSub">If you need to optimize your business or need your digital footprint for exposure you've come to the right place.   </p>
+
+    <a href="/#work" class="hero-btn">View My Work</a>
+
+    <div class="globe"></div>
+  </section>
+
+  <!-- ─── ABOUT ──────────────────────────────────────────── -->
+  <section id="about">
+    <div class="about-card fade-up">
+      <!-- Replace src with your actual photo path, e.g. src="images/avatar.jpg" -->
+      <div class="about-avatar">
+        <img src="images/avatar.jpg" alt="Ravi Katiyar" />
+      </div>
+      <h2 class="about-name">Jacques Laguerre</h2>
+      <p class="about-role">Software Developer</p>
+      <p class="about-bio">Hey there, I'm passionate about creating and maintaining software. I've had the opportunity to help and assist several individuals with different backgrounds for their tech needs which gives me the flexibility to work with anyone. I hope I can do the same for you.</p>
+
+      <div class="about-socials">
+        <!-- Instagram -->
+        <a href="https://www.instagram.com/jacques_laguerre/?next=%2F" target="_blank" class="social-btn" aria-label="Instagram">
+          <svg viewBox="0 0 24 24" stroke-width="1.8">
+            <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+            <circle cx="12" cy="12" r="4"/>
+            <circle cx="17.5" cy="6.5" r="0.8" stroke="none" fill="var(--text)"/>
+          </svg>
+        </a>
+      </div>
+
+      <a href="/#contact" class="contact-btn-small">
+        Contact Me
+        <svg viewBox="0 0 24 24" stroke-width="2"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>
+      </a>
+      <a href="https://calendar.app.google/JYdbwCmvMPgJodQEA" target="_blank" class="contact-btn-small">
+        Book Your Consultation
+        <svg viewBox="0 0 24 24" stroke-width="2"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>
+      </a>
+    </div>
+  </section>
+
+  <!-- ─── MY WORK ────────────────────────────────────────── -->
+  <section id="work">
+    <div class="section-inner">
+      <div class="section-label">Selected Work</div>
+      <h2 class="section-title fade-up">Projects that<br>speak for themselves</h2>
+
+      <div class="work-grid">
+
+        <!-- CARD 1 ─ Replace href and src below -->
+        <a href="https://www.securetax.co/" target="_blank" class="work-card fade-up">
+          <div class="work-card-img">
+            <img src="images/project1.jpg" alt="Project 1" />
+            <!-- <div class="placeholder">◈</div> -->
+            <div class="work-card-overlay">
+              <span class="work-card-overlay-link">
+                Visit Site
+                <svg viewBox="0 0 24 24" stroke-width="2"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>
+              </span>
+            </div>
+          </div>
+          <div class="work-card-meta">
+            <div class="work-card-title">Secure Tax</div>
+            <div class="work-card-desc">This tax office has grown into a seven-figure business by combining trusted expertise with a strong digital presence that works around the clock. Their website acts as a nationwide front door—building credibility, educating clients, and capturing leads at scale so they’re no longer limited by geography or walk-in traffic. With streamlined online consultations, secure document sharing, and clear calls to action, they can efficiently serve individuals and businesses across all 50 U.S. states, expanding their reach while maintaining high-quality, personalized service.</div>
+          </div>
+        </a>
+
+        <!-- CARD 2 ─ Replace href and src below -->
+        <a href="https://evotax.us/" target="_blank" class="work-card fade-up">
+          <div class="work-card-img">
+          <img src="images/project2.jpg" alt="Project 2" /> 
+            <!-- <div class="placeholder">◈</div> -->
+            <div class="work-card-overlay">
+              <span class="work-card-overlay-link">
+                Visit Site
+                <svg viewBox="0 0 24 24" stroke-width="2"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>
+              </span>
+            </div>
+          </div>
+          <div class="work-card-meta">
+            <div class="work-card-title">EVOTAX</div>
+            <div class="work-card-desc">This business scaled to six figures in under a year largely because its website was built as a true growth engine, not just an online brochure. From day one, the site positioned EVOTAX as modern, credible, and easy to work with clearly communicating value, simplifying the onboarding process, and converting visitors into qualified leads. With strong branding, clear messaging, and seamless online quotes and consultations, the website expanded the firm’s reach beyond local limits, enabling them to serve clients across all 50 states and U.S. expats worldwide, while accelerating trust, visibility, and revenue at scale.</div>
+          </div>
+        </a>
+
+        <!-- CARD 3 ─ Replace href and src below -->
+        <a href="https://www.luxmenwear.net/" target="_blank" class="work-card fade-up">
+          <div class="work-card-img">
+            <img src="images/project3.jpg" alt="Project 3" />
+            <!-- <div class="placeholder">◈</div> -->
+            <div class="work-card-overlay">
+              <span class="work-card-overlay-link">
+                Visit Site
+                <svg viewBox="0 0 24 24" stroke-width="2"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>
+              </span>
+            </div>
+          </div>
+          <div class="work-card-meta">
+            <div class="work-card-title">Luxmen</div>
+            <div class="work-card-desc">This website became a powerful growth tool by dramatically expanding the brand’s reach and visibility beyond traditional, in store traffic. With a clean, premium design, clear promotions, and a seamless shopping experience, it attracts new customers, builds trust, and keeps visitors engaged. By making the brand accessible online at all times, the business is able to connect with a wider audience, drive more consistent customer flow, and turn interest into repeat purchases.</div>
+          </div>
+        </a>
+
+        <!-- CARD 4 ─ Replace href and src below -->
+        <a href="https://chefrance.co/" target="_blank" class="work-card fade-up">
+          <div class="work-card-img">
+           <img src="images/project4.jpg" alt="Project 4" /> 
+            <!-- <div class="placeholder">◈</div> -->
+            <div class="work-card-overlay">
+              <span class="work-card-overlay-link">
+                Visit Site
+                <svg viewBox="0 0 24 24" stroke-width="2"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>
+              </span>
+            </div>
+          </div>
+          <div class="work-card-meta">
+            <div class="work-card-title">Chef France</div>
+            <div class="work-card-desc">This website gave the catering business a strong visual platform to showcase their work and tell their story in a way that immediately connects with potential clients. Through rich imagery, clear navigation, and dedicated sections for services and past work, the site helps visitors quickly understand their style, quality, and range. By being discoverable online and presenting their offerings professionally, the business is able to reach more customers, attract new inquiries, and turn their food into an experience people can see, trust, and book.</div>
+          </div>
+        </a>
+           <div style="grid-column: 1 / -1; display: flex; justify-content: center;">
+             <a href="https://calendar.app.google/JYdbwCmvMPgJodQEA" target="_blank" class="contact-btn-small">
+               Book Your Consultation
+               <svg viewBox="0 0 24 24" stroke-width="2"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>
+             </a>
+           </div>
+    </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── MISSION ───────────────────────────────────────── -->
+  <section id="mission">
+    <div class="mission-inner">
+      <div class="mission-text fade-up">
+        <div class="section-label">My Mission</div>
+        <h2 class="section-title">Help you optimize<br> & Save Time</h2>
+        <p class="mission-body">
+          <!-- Edit the text below to your actual mission statement -->
+      My mission is to help businesses  <strong>save time, optimize their operations, and establish a strong digital footprint  </strong>by combining automated systems with <strong>high performing websites </strong>. Through <strong> smart automation, thoughtful design, and strategic functionality</strong>, I create digital experiences that work efficiently behind the scenes allowing brands to reach more people, showcase their value, and scale with confidence.
+        </p>
+      </div>
+
+      <div class="mission-stats fade-up">
+        <!-- Edit numbers and labels below -->
+        <div class="stat-card">
+          <div class="stat-number">3+</div>
+          <div class="stat-label">Years of experience</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number">10+</div>
+          <div class="stat-label">Projects shipped</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number">15+</div>
+          <div class="stat-label">Happy clients</div>
+        </div>
+        <!-- <div class="stat-card">
+          <div class="stat-number">∞</div>
+          <div class="stat-label">Iterations made</div>
+        </div> -->
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── CONTACT ───────────────────────────────────────── -->
+  <section id="contact">
+    <div class="section-inner">
+      <div class="contact-left fade-up">
+        <div class="section-label">Get In Touch</div>
+        <h2 class="section-title">Let's build something great</h2>
+        <p class="contact-tagline">Have a project in mind or a question?  My inbox is always open.</p>
+      </div>
+
+      <div class="fade-up">
+        <div class="contact-form" id="contactForm">
+          <div class="form-row">
+            <div class="form-group">
+              <label>Name</label>
+              <input type="text" placeholder="Your name" id="formName" />
+            </div>
+            <div class="form-group">
+              <label>Email</label>
+              <input type="email" placeholder="your@email.com" id="formEmail" />
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Message</label>
+            <textarea placeholder="Tell me about your project..." id="formMessage"></textarea>
+          </div>
+          <button class="form-submit" onclick="submitForm()">
+            Send Message
+            <svg viewBox="0 0 24 24" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+          </button>
+        </div>
+
+        <div class="form-success" id="formSuccess">
+          <div class="form-success-icon">✦</div>
+          <h3 style="font-family:'Syne',sans-serif; font-weight:800;">Message received!</h3>
+          <p>Thanks for reaching out. I'll get back to you as soon as possible.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── FOOTER ────────────────────────────────────────── -->
+  <footer>
+    <span class="footer-name">Jacques Laguerre</span>
+    <span class="footer-copy">© 2026 — All rights reserved</span>
+  </footer>
+
+  <!-- ─── JS ────────────────────────────────────────────── -->
+  <script>
+    /* ── Theme Toggle ── */
+    const html = document.documentElement;
+    const btn = document.getElementById('themeToggle');
+    const sun = document.getElementById('iconSun');
+    const moon = document.getElementById('iconMoon');
+
+    function applyTheme(t) {
+      html.setAttribute('data-theme', t);
+      if (t === 'dark') { sun.style.display = 'none'; moon.style.display = 'block'; }
+      else { sun.style.display = 'block'; moon.style.display = 'none'; }
+      localStorage.setItem('theme', t);
+    }
+
+    btn.addEventListener('click', () => {
+      applyTheme(html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
+    });
+
+    // Restore saved theme
+    const saved = localStorage.getItem('theme');
+    applyTheme(saved || 'dark');
+
+    const sectionToHash = {
+      home: '/#home',
+      about: '/#about',
+      work: '/#work',
+      mission: '/#contact',
+      contact: '/#contact',
+    };
+
+    /* ── Active Nav Highlight ── */
+    const navLinks = document.querySelectorAll('nav a');
+    const sections = ['home','about','work','mission','contact'];
+
+    function setActive(id) {
+      const hash = sectionToHash[id] || '/#home';
+      navLinks.forEach(l => {
+        l.classList.toggle('active', l.getAttribute('href') === hash);
+      });
+    }
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if (e.isIntersecting) setActive(e.target.id); });
+    }, { threshold: 0.4 });
+
+    sections.forEach(id => {
+      const el = document.getElementById(id);
+      if (el) observer.observe(el);
+    });
+
+    /* ── Scroll Fade In ── */
+    const fadeEls = document.querySelectorAll('.fade-up');
+    const fadeObs = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+    }, { threshold: 0.15 });
+    fadeEls.forEach(el => fadeObs.observe(el));
+
+    /* ── Hero Slides ── */
+    const slides = [
+      { label: 'NEXT-GEN DESIGN', title: 'Build smarter tools<br>for modern teams', sub: 'Streamline your workflow and boost productivity with intuitive solutions. Security, speed, and simplicity—all in one platform.' },
+      { label: 'CRAFT & CODE', title: 'Where design<br>meets engineering', sub: 'Every pixel purposeful. Every interaction seamless. Building digital products that feel inevitable and look extraordinary.' },
+      { label: 'STRATEGY & VISION', title: 'Turning ideas into<br>real experiences', sub: 'From initial concept to polished product — I help teams ship work that users genuinely love and return to.' },
+    ];
+    let current = 0;
+
+    function goTo(i) {
+      current = (i + slides.length) % slides.length;
+      const s = slides[current];
+      document.getElementById('heroLabel').textContent = s.label;
+      document.getElementById('heroTitle').innerHTML = s.title;
+      document.getElementById('heroSub').textContent = s.sub;
+    }
+    function nextSlide() { goTo(current + 1); }
+    function prevSlide() { goTo(current - 1); }
+
+    /* ── Stars Animation ── */
+    (function () {
+      const canvas = document.getElementById('starsCanvas');
+      const ctx = canvas.getContext('2d');
+      const COUNT = 90;
+      const stars = [];
+
+      function rand(min, max) { return Math.random() * (max - min) + min; }
+
+      function resize() {
+        canvas.width = canvas.offsetWidth;
+        canvas.height = canvas.offsetHeight;
+      }
+
+      function makeStar() {
+        return {
+          x: rand(0, canvas.width),
+          y: rand(0, canvas.height),
+          r: rand(0.4, 1.8),
+          opacity: rand(0.3, 1),
+          driftX: rand(-0.08, 0.08),
+          driftY: rand(-0.15, -0.04),
+          twinkleSpeed: rand(0.008, 0.025),
+          twinkleOffset: rand(0, Math.PI * 2),
+        };
+      }
+
+      function init() {
+        resize();
+        stars.length = 0;
+        for (let i = 0; i < COUNT; i++) stars.push(makeStar());
+      }
+
+      let frame = 0;
+      function draw() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        frame++;
+        const isDark = document.documentElement.getAttribute('data-theme') !== 'light';
+        const rgb = isDark ? '255,255,255' : '80,80,110';
+
+        stars.forEach(s => {
+          const twinkle = 0.5 + 0.5 * Math.sin(frame * s.twinkleSpeed + s.twinkleOffset);
+          const alpha = s.opacity * twinkle;
+
+          s.x += s.driftX;
+          s.y += s.driftY;
+          if (s.y < -6) { s.y = canvas.height + 6; s.x = rand(0, canvas.width); }
+          if (s.x < -6) s.x = canvas.width + 6;
+          if (s.x > canvas.width + 6) s.x = -6;
+
+          // Soft outer glow
+          ctx.save();
+          ctx.globalAlpha = alpha * 0.25;
+          ctx.shadowBlur = 12;
+          ctx.shadowColor = `rgba(${rgb},1)`;
+          ctx.fillStyle = `rgba(${rgb},1)`;
+          ctx.beginPath();
+          ctx.arc(s.x, s.y, s.r * 3.5, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.restore();
+
+          // Bright core
+          ctx.save();
+          ctx.globalAlpha = alpha;
+          ctx.shadowBlur = 5;
+          ctx.shadowColor = `rgba(${rgb},1)`;
+          ctx.fillStyle = `rgba(${rgb},1)`;
+          ctx.beginPath();
+          ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.restore();
+        });
+
+        requestAnimationFrame(draw);
+      }
+
+      window.addEventListener('resize', init);
+      init();
+      draw();
+    })();
+
+    /* ── Contact Form ── */
+    function submitForm() {
+      const name = document.getElementById('formName').value.trim();
+      const email = document.getElementById('formEmail').value.trim();
+      const msg = document.getElementById('formMessage').value.trim();
+      if (!name || !email || !msg) { alert('Please fill in all fields.'); return; }
+      const subject = encodeURIComponent('Portfolio inquiry from ' + name);
+      const body = encodeURIComponent('Name: ' + name + '\nEmail: ' + email + '\n\nMessage:\n' + msg);
+      const a = document.createElement('a');
+      a.href = 'mailto:jacquesblaguerre@gmail.com?subject=' + subject + '&body=' + body;
+      a.click();
+      document.getElementById('contactForm').style.display = 'none';
+      document.getElementById('formSuccess').classList.add('show');
+    }
+  </script>
+</body>
+</html>
