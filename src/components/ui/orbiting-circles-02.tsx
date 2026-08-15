@@ -25,23 +25,25 @@ const orbits: { size: string; duration: number; icons: OrbitIcon[] }[] = [
     size: "w-[600px] h-[600px] md:w-[880px] md:h-[880px]",
     duration: 24,
     icons: [
-      { src: "/toolsLogos/react_logo.png", alt: "React", angle: -60 },
+      { src: "/toolsLogos/react_logo.png", alt: "React", angle: -75 },
+      { src: "/toolsLogos/nodejs_logo.png", alt: "Node.js", angle: -25 },
       {
         src: "/toolsLogos/nextjs_logo.png",
         alt: "Next.js",
-        angle: 0,
+        angle: 25,
         invertInDark: true,
       },
-      { src: "/toolsLogos/vs_code.png", alt: "VS Code", angle: 60 },
+      { src: "/toolsLogos/vs_code.png", alt: "VS Code", angle: 75 },
     ],
   },
   {
     size: "w-[720px] h-[720px] md:w-[1060px] md:h-[1060px]",
     duration: 30,
     icons: [
-      { src: "/toolsLogos/python_logo.png", alt: "Python", angle: -60 },
-      { src: "/toolsLogos/Postgresql_elephant.svg.png", alt: "PostgreSQL", angle: 0 },
-      { src: "/toolsLogos/supabase_logo.png", alt: "Supabase", angle: 60 },
+      { src: "/toolsLogos/python_logo.png", alt: "Python", angle: -75 },
+      { src: "/toolsLogos/Postgresql_elephant.svg.png", alt: "PostgreSQL", angle: -25 },
+      { src: "/toolsLogos/supabase_logo.png", alt: "Supabase", angle: 25 },
+      { src: "/toolsLogos/dockerLogo.png", alt: "Docker", angle: 75 },
     ],
   },
 ];
