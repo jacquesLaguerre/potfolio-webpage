@@ -7,13 +7,13 @@ import {
 
 const SLIDES: CoverflowSlide[] = [
   {
-    src: "/projectsLogos/securetax-logo.PNG",
-    alt: "Secure Tax logo",
-    title: "Secure Tax",
-    subtitle: "Tax Consulting",
+    src: "/projectsLogos/kcleanse-favicon.png",
+    alt: "KCleanse logo",
+    title: "KCleanse",
+    subtitle: "K-Beauty Skincare",
     tagline:
-      "A nationwide front door that turned a local tax office into a seven-figure business.",
-    href: "https://www.securetax.co/",
+      "A clean-beauty storefront built on ingredient transparency, turning skincare-conscious shoppers into loyal customers.",
+    href: "https://kcleanse.net/",
     fit: "contain",
   },
   {
@@ -37,13 +37,13 @@ const SLIDES: CoverflowSlide[] = [
     fit: "contain",
   },
   {
-    src: "/projectsLogos/kcleanse-favicon.png",
-    alt: "KCleanse logo",
-    title: "KCleanse",
-    subtitle: "K-Beauty Skincare",
+    src: "/projectsLogos/securetax-logo.PNG",
+    alt: "Secure Tax logo",
+    title: "Secure Tax",
+    subtitle: "Tax Consulting",
     tagline:
-      "A clean-beauty storefront built on ingredient transparency, turning skincare-conscious shoppers into loyal customers.",
-    href: "https://kcleanse.net/",
+      "A nationwide front door that turned a local tax office into a seven-figure business.",
+    href: "https://www.securetax.co/",
     fit: "contain",
   },
 ];
